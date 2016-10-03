@@ -362,6 +362,11 @@ class TreeView extends View
                 tc += "_add"
             else
                 tc += "_sub"
+        if @get_output_of( info.item )?.length
+            if @closed.contains info.item_path
+                tc += "_add"
+            else
+                tc += "_sub"                
         
         # the * - | sign
         new_dom_element
