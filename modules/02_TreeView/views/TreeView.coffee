@@ -357,16 +357,11 @@ class TreeView extends View
             tc += "_mid"
         else
             tc += "_end"
-        if @get_children_of( info.item )?.length
+        if @get_children_of( info.item )?.length or @get_output_of( info.item )?.length
             if @closed.contains info.item_path
                 tc += "_add"
             else
-                tc += "_sub"
-        if @get_output_of( info.item )?.length
-            if @closed.contains info.item_path
-                tc += "_add"
-            else
-                tc += "_sub"                
+                tc += "_sub"        
         
         # the * - | sign
         new_dom_element
