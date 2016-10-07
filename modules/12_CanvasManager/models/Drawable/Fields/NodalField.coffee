@@ -25,7 +25,17 @@ class NodalField extends Model
         @add_attr
             _mesh: mesh
             _data: new TypedArray_Float64( mesh?.nb_points?() )
-            
+
+        # to store the init data 
+        @bind =>
+            if @_data.has_been_modified() and @_data.get(0) != 0 and not @_init
+                @add_attr
+                    _data_init: new TypedArray_Float64( @size() )
+                    _init: new Model
+                for i in [ 0 ... @size() ]
+                    @_data_init.set_val i, @_data.get(i)
+                        
+                        
         @_date_bufs = {}
         @_data_buffer = {}
            
@@ -39,6 +49,9 @@ class NodalField extends Model
                 
         model.drawing_parameters.add_attr
             display_style: new Choice( 1, [ "Wireframe", "Surface", "Surface with Edges" ] )
+            value_parameters: 
+                scale: 1.0
+                gap: 0.0
             legend       : model.drawing_parameters._legend
     
     get_sub_field: ( info ) ->
@@ -53,6 +66,13 @@ class NodalField extends Model
     draw: ( info, parameters, additionnal_parameters ) ->
         if parameters?
             @actualise_value_legend parameters._legend
+            
+            if parameters.value_parameters
+                if parameters.value_parameters.scale.has_been_modified()
+                    console.log @_data
+                    @_data._data = @_data_init._data.map( (val) => val = val * parameters.value_parameters.scale.get() )
+                if parameters.value_parameters.gap.has_been_modified()
+                    @_data._data = @_data_init._data.map( (val) => val = val + parameters.value_parameters.gap.get() )
             
             if info.ctx_type == "gl"
                 nn = -1
