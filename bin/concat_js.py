@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 # Copyright 2012 SpinalCom www.spinalcom.com
 #
 # This file is part of SpinalNodeJS.
@@ -19,7 +20,7 @@
 """
 Contains the function
   def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen" ):
-  
+
 which permits to compile and concatenate coffescript, js and css files present in root_dir or sub directories in output_...
 
 It looks for dependencies in order to include files in the right order.
@@ -38,7 +39,7 @@ class File:
         self.prof = -1
         self.depe = []
         self.libs = []
-        for l in file( name ).readlines():
+        for l in open( name ).readlines():
             r = re.search( r'[#/] dep[ ]*(.*)[ ]*$', l )
             if r:
                 self.depe.append( r.group( 1 ) )
@@ -66,8 +67,8 @@ def find_file( files, base ):
             return c
     return 0
 
-#    
-def get_files( root ):            
+#
+def get_files( root ):
     res = []
     if os.path.isdir( root ):
         for root, dirs, files in os.walk( root ):
@@ -84,7 +85,7 @@ def get_files( root ):
 
 #
 def app_code( out, inp, root_dir ):
-    for l in file( inp ).readlines():
+    for l in open( inp ).readlines():
         # inline base64
         r = re.search(r'^(.*)(["\'])(img/.*\.(png|jpg))["\'](.*)$', l ) # (img_src_[^ ]+).*# ([^ ]+)
         if r:
@@ -93,17 +94,16 @@ def app_code( out, inp, root_dir ):
             img = r.group( 3 )
             typ = r.group( 4 )
             end = r.group( 5 )
-            
             # base64 data
-            b = os.popen( "base64 -w 0 " + root_dir + "/../" + img ).read()
-            
+            b = os.popen( "base64 -w 0 ./" + root_dir + "/../" + img ).read()
+
             # mimetype
             if typ == 'jpg':
                 typ = 'jpeg'
-                
+
             out.write( beg + gui + "data:image/" + typ + ";base64," + b + gui + end + "\n" )
             continue
-          
+
         # inline base64
         r = re.search(r'^(.*)(["\'])(img/.*\.gif)["\'](.*)$', l ) # (img_src_[^ ]+).*# ([^ ]+)
         if r:
@@ -111,26 +111,34 @@ def app_code( out, inp, root_dir ):
             gui = r.group( 2 )
             img = r.group( 3 )
             end = r.group( 4 )
-            
+
             # base64 data
-            b = os.popen( "base64 -w 0 " + root_dir + "/../" + img ).read()
-                
+            b = os.popen( "base64 -w 0 ./" + root_dir + "/../" + img ).read()
+
             out.write( beg + gui + "data:image/gif;base64," + b + gui + end + "\n" )
             continue
-          
+
         out.write( l )
- 
+
 #
 def exec_cmd( cmd ):
-    print cmd
+    print ("\033[0;35m" + cmd + "\033[m");
     if os.system( cmd ):
         sys.exit( 1 )
- 
+
+def exec_cmd_silent( cmd ):
+    if os.system( cmd ):
+        sys.exit( 1 )
+
+def exec_compile( cmd ):
+    print ("\033[0;34m" + cmd + "\033[m");
+    if os.system( cmd ):
+        sys.exit( 1 )
 #
 def mkdir_for( name ):
-    l = string.split( name, "/" )
+    l = name.split("/" )
     for n in range( 1, len( l ) ):
-        newdir = string.join( l[ 0 : n ], "/" )
+        newdir = "/".join(l[ 0 : n ])
         if not os.path.exists( newdir ):
             os.mkdir( newdir )
 
@@ -151,35 +159,35 @@ def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen", base_img =
             if r.name.endswith( ".coffee" ):
                 if out_js == None:
                     mkdir_for( output_js )
-                    out_js = file( output_js, "w" )
-                    
+                    out_js = open( output_js, "w" )
+
                 js_src = tmp_dir + "/" + r.base.replace( ".coffee", ".js" )
                 if os.path.exists( js_src ) == False or os.path.getmtime( r.name ) > os.path.getmtime( js_src ):
-                    exec_cmd( "coffee -o " + tmp_dir + " -b --compile " + r.name )
+                    exec_compile( "coffee -o " + tmp_dir + " -b --compile " + r.name )
                 app_code( out_js, js_src, base_img )
-                
+
             #if r.name.endswith( ".js" ):
             #    app_code( out_js, r.name, root_dir )
-                
+
         if output_cs:
             if r.name.endswith( ".css" ):
                 if out_cs == None:
                     mkdir_for( output_cs )
-                    out_cs = file( output_cs, "w" )
-                    
+                    out_cs = open( output_cs, "w" )
+
                 app_code( out_cs, r.name, base_img )
-                
+
         for l in r.libs:
             if not ( l in libs ):
                 libs.append( l )
 
-    if out_js != None:
-        print "js output ->", output_js
-    if out_cs != None:
-        print "css output ->", output_cs
+    # if out_js != None:
+    #     print ("\033[0;36mjs output -> " + output_js + "\033[m")
+    # if out_cs != None:
+    #     print ("\033[0;36mcss output -> " + output_cs + "\033[m")
 
     return libs
-    
+
 #
 def make_tests( tests_dir = "tests", base_dir = "gen", pref_js = "../" ):
     for p in os.listdir( tests_dir ):
@@ -194,8 +202,8 @@ def make_tests( tests_dir = "tests", base_dir = "gen", pref_js = "../" ):
         libs = concat_js( tests_dir + "/" + p, js, base_img = tests_dir )
         libs.append( ra + ".js" )
         html = file( ht, "w" )
-        print 'html ouput ->', ht
-        
+        print ('html ouput ->', ht)
+
         print >> html, '<html> '
         print >> html, '  <head> '
         print >> html, '    <title>__' + ba + '__</title>'
@@ -210,5 +218,3 @@ def make_tests( tests_dir = "tests", base_dir = "gen", pref_js = "../" ):
         print >> html, '  <body onload="' + ra + '()"> '
         print >> html, '  </body> '
         print >> html, '</html>'
-        
-    

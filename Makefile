@@ -1,9 +1,11 @@
 
-
 all:
-	python	bin/make.py
+	@echo "compiling lib_is-sim..."
+	@python	bin/make.py
+	@echo "\n\033[0;32m[OK] Compiling lib_is-sim : Done\033[m\n"
 
 clean:
-	rm -r gen/; rm -r .gen/; rm models.js; rm processes.js; rm stylesheets.css
+	@! test -e gen || rm -rf gen/ .gen/ models.js processes.js stylesheets.css
+	@echo "\033[0;32m[OK] cleaning lib_is-sim : Done\033[m"
 
 .PHONY: all clean
