@@ -31,7 +31,7 @@ class ModelEditorItem_Lst extends ModelEditorItem
                 if v.destructor
                   v.destructor()
                 else
-                  if v.parentNode?
+                  if v.parentNode
                       v.parentNode.removeChild v
 
             for v in @dst
@@ -46,18 +46,22 @@ class ModelEditorItem_Lst extends ModelEditorItem
                       parent: this
                       nodeName: 'br'
                     @ed.appendChild br
-                    @lst = for i in @model
-                        new_model_editor
+                    @lst = []
+                    @lst.push(br);
+                    for i in @model
+                        res = new_model_editor
                             el        : @ed
                             model     : i
                             parent    : this
-                            item_width: w
+                            # item_width: w
                         br = new_dom_element
                           parent: this
                           nodeName: 'div'
                           style:
                             height:'5px'
                         @ed.appendChild br
+                        @lst.push(res);
+                        @lst.push(br);
                     @dst = []
                 else
                     @lst = []

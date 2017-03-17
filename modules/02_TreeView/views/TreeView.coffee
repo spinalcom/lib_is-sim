@@ -25,24 +25,24 @@ class TreeView extends View
             @visibility_context = new Str "default_visibility_context"
         if not @visible[ @visibility_context.get() ]?
             @visible.add_attr @visibility_context.get(), new Lst
-            
+
         super [ @roots, @closed, @selected, @visible, @visibility_context ]
 
         # prefix for class names
         @css_prefix = ""
-        
+
         # used by the default make_line method
         @icon_width = 18
-        
+
         #
         @line_height = 18
-        
+
         # use when there is multiple instance of the same object in the tree
         @index_color_for_tree = 0
-        
+
         # kind of tab space for indentation of tree items
         @sep_x = @line_height * 4 / 4
-        
+
         # div to show where items are inserted (drag and drop / ...)
         @_line_div = new_dom_element
             className: @css_prefix + "TreeLine"
@@ -53,18 +53,18 @@ class TreeView extends View
 
         # used to destroy elements from previous rendering
         @_created_elements = []
-        
+
         # used to link model_id of tree item to dom
         @linked_id_dom = {}
-        
+
     # may be redefined depending on how the user want to construct the graph. Return the children of item
     get_children_of: ( item ) ->
         item._children
-        
+
     # may be redefined depending on how the user want to construct the graph. Return the children of item
     get_output_of: ( item ) ->
         item._output
-        
+
         #         tab = new Lst
         #         for output in item._output
         #             tab.push output
@@ -86,7 +86,7 @@ class TreeView extends View
 #         console.log (item instanceof TreeItem_Computable)
         return (item instanceof TreeItem_Computable)
         #item.auto_compute
-        
+
     # may be redefined depending on how the user want to display items. Return the children of item
     get_name_of: ( item ) ->
         return item._name
@@ -114,7 +114,7 @@ class TreeView extends View
                 if @get_output_of( model )?.has_been_directly_modified()
                     dom_elem = @linked_id_dom[ model.model_id ]
                     dom_elem.classList.add "TreeJustModified"
-                        
+
     #looking for duplication in tree
     _get_color_element: ( info ) ->
         col = "#262626"
@@ -127,8 +127,8 @@ class TreeView extends View
 #                 col = "green"
         #                 #TODO need to know if color of duplicate item is already choosen or not
         return col
-    
-        
+
+
     _get_next_color_element: ->
         tab = [ "lightSeaGreen" ] #, "orange", "lightGreen", "yellow", "lightPink"
         if @index_color_for_tree == tab.length - 1
@@ -136,30 +136,30 @@ class TreeView extends View
         else
             @index_color_for_tree++
         return tab[ @index_color_for_tree ]
-        
-        
+
+
     _render: ->
-            
+
         # remove old elements
         for c in @_created_elements
             @el.removeChild c
         @_created_elements = []
         @linked_id_dom = {}
         pos_y = 0
-        
+
         # header title (bad)
         @height_header = @line_height + 10
         @height_icon_bar = 0
         pos_y += @height_header
         pos_y += @height_icon_bar
-        
+
         @treeContainer = new_dom_element
             nodeName  : "div"
             id        : "ContainerTreeView"
             parentNode: @el
         @_created_elements.push @treeContainer
-        
-        
+
+
         for info in @flat
             do ( info ) =>
                 div = new_dom_element
@@ -175,31 +175,31 @@ class TreeView extends View
                         right   : 0
                         overflow: "hidden"
                         color   : @_get_color_element info
-                    
+
                     #                     onmousedown: ( evt ) =>
                     #                         evt = window.event if not evt?
-                    # 
+                    #
                     #                         mouse_b = if evt.which?
                     #                             if evt.which > 2
                     #                                 "LEFT"
-                    #                             else if evt.which == 2 
+                    #                             else if evt.which == 2
                     #                                 "MIDDLE"
                     #                             else
                     #                                 "RIGHT"
                     #                         else
                     #                             if evt.button < 2
                     #                                 "LEFT"
-                    #                             else if evt.button == 4 
+                    #                             else if evt.button == 4
                     #                                 "MIDDLE"
                     #                             else
                     #                                 "RIGHT"
-                    #                         
+                    #
                     #                         if mouse_b == "RIGHT"
                     #                             evt.stopPropagation()
                     #                             evt.cancelBubble = true
-                    #                             # ... rien ne marche sous chrome sauf document.oncontextmenu = => return false 
+                    #                             # ... rien ne marche sous chrome sauf document.oncontextmenu = => return false
                     #                             document.oncontextmenu = => return false
-                    
+
                     onclick: ( evt ) =>
                         if evt.ctrlKey
                             @selected.toggle info.item_path
@@ -207,21 +207,21 @@ class TreeView extends View
                             @selected.clear()
                             @selected.push info.item_path
                         return true
-                            
+
                     draggable: true
-                
+
                     ondragstart: ( evt ) =>
                         @drag_info = info
                         @drag_kind = if evt.ctrlKey then "copy" else "move"
                         evt.dataTransfer.effectAllowed = @drag_kind
                         evt.dataTransfer.setData('text/plain', '') #mozilla need data to allow drag
-        
+
                     ondragend: ( evt ) =>
                         if @_line_div.parentNode == @el
                             @el.removeChild @_line_div
                         evt.returnValue = false
                         return false
-                        
+
                     ondragover: ( evt ) =>
                         for num in [ info.path.length - 1 .. 0 ]
                             par = info.path[ num ]
@@ -238,19 +238,19 @@ class TreeView extends View
                                 break
                         evt.returnValue = false
                         return false
-                        
+
                     ondragleave : ( evt ) =>
                         if @_line_div.parentNode == @el
                             @el.removeChild @_line_div
                         evt.returnValue = false
                         return false
-        
+
                     ondrop : ( evt ) =>
 #                         r = TreeView.default_types[ 0 ]
 #                         r evt, info
 
-                                    
-                                    
+
+
 #                         console.log evt, evt.dataTransfer.files, info
 #                         # Drop of file from browser to tree
 #                         file.load ( m, err ) =>
@@ -261,7 +261,7 @@ class TreeView extends View
 #                             for m in @modules
 #                                 if m instanceof TreeAppModule_ImageSet
 #                                     m.actions[ 1 ].fun evt, app, img_item
-                        
+
                         # External drag and drop
                         if typeof files == "undefined" #Drag and drop
                             evt.stopPropagation()
@@ -269,7 +269,7 @@ class TreeView extends View
                             evt.preventDefault()
                             files = evt.dataTransfer.files
                         if evt.dataTransfer.files.length > 0
-                            for file in files 
+                            for file in files
                                 format = file.type.indexOf "image"
                                 console.log "TODO, need to create an Img who contains a Path"
                                 if format isnt -1
@@ -291,18 +291,18 @@ class TreeView extends View
                                 n = 0
                                 if num + 1 < info.path.length
                                     n = info.path[ num + 1 ].num_in_parent + 1
-                                
+
                                 @insert_child par.item, n, @drag_info.item
                                 break
-                            
+
                         evt.returnValue = false
                         evt.stopPropagation()
                         evt.preventDefault()
                         return false
 
-                
+
                 @linked_id_dom[ info.item.model_id ] = div
-                
+
                 #surligne les réfrence à l'element selectionné
                 is_ref = false
                 for elem in @flat
@@ -313,25 +313,25 @@ class TreeView extends View
                                 break
                 if is_ref
                     div.className += " #{@css_prefix}TreePartiallySelected"
-                
+
                 #surligne l'element selectionné
                 if @selected.contains info.item_path
                     div.className += " #{@css_prefix}TreeSelected"
                 else if @closed.contains( info.item_path ) and @_has_a_selected_child( info.item, info.item_path )
                     div.className += " #{@css_prefix}TreePartiallySelected"
-                
-                
+
+
 #                 @_created_elements.push div
                 pos_y += @line_height
-                
+
                 @_add_tree_signs div, info
                 @_make_line      div, info
-                
+
 
     #
     _add_tree_signs: ( div, info ) ->
         pos_x = 0
-        
+
         for p in info.parents
             if p.num_in_parent < p.len_sibling - 1
                 new_dom_element
@@ -345,7 +345,7 @@ class TreeView extends View
                         width   : @sep_x
                         height  : @line_height
             pos_x += @sep_x
-        
+
         tc = @css_prefix + "TreeIcon_tree"
         num_i = info.num_in_parent
         len_i = info.len_sibling
@@ -361,8 +361,8 @@ class TreeView extends View
             if @closed.contains info.item_path
                 tc += "_add"
             else
-                tc += "_sub"        
-        
+                tc += "_sub"
+
         # the * - | sign
         new_dom_element
             parentNode : div
@@ -380,7 +380,7 @@ class TreeView extends View
     #
     _make_line: ( div, info ) ->
         pos_x = @sep_x * info.path.length
-        
+
         # icon
 #         ico = @get_ico_of( info.item )?.get()
 #         if ico?.length
@@ -394,9 +394,9 @@ class TreeView extends View
 #                     top      : 0
 #                     left     : pos_x
 #                     height   : @line_height
-#             
+#
 #             pos_x += @line_height # * 12 / 16
-            
+
         name = new_dom_element
             parentNode: div
             txt       : info.name
@@ -414,7 +414,7 @@ class TreeView extends View
             name.style.textAlign = "left"
             name.style.color = "red"
             name.style.right = "20px"
-                
+
         # computable
         if @get_computable_of( info.item )
 #             console.log info.item._computation_mode.get()
@@ -422,7 +422,7 @@ class TreeView extends View
 #             if not info.item._computation_mode.get() and not info.item._computation_state.get()
 #                 console.log "TreeComputableItem"
             classTitle = "TreeComputableItem"
-        
+
 #             else if info.item._computation_state.get() # or info.item._pending_state.get() or info.item._processing_state.get() or info.item._finish_state.get()
 #                 classTitle = "TreeProcessingItem"
 
@@ -436,8 +436,8 @@ class TreeView extends View
                     position: "absolute"
                     top     : 0
                     right   : 22
-                    
-        
+
+
         # visibility
         if @get_viewable_of( info.item )?.toBoolean()
             new_dom_element
@@ -451,14 +451,14 @@ class TreeView extends View
                     position: "absolute"
                     top     : 0
                     right   : 0
-                
-                
-    #        
+
+
+    #
     _update_repr: ->
         @flat = []
         @repr = for num_item in [ 0 ... @roots.length ]
             @_update_repr_rec @roots[ num_item ], num_item, @roots.length, []
-        
+
     _update_repr_rec: ( item, number, length, parents, output = false ) ->
         info =
             item         : item
@@ -476,7 +476,7 @@ class TreeView extends View
 
         info.path.push info
         info.item_path.push item
-        
+
         @flat.push info
 
         if not @closed.contains( info.item_path )
@@ -486,22 +486,22 @@ class TreeView extends View
                     par = ( p for p in parents )
                     par.push info
                     @_update_repr_rec ch[ num_ch ], num_ch, ch.length, par, false
-                    
+
             ch = @get_output_of( item )
             if ch?
                 info.outputs = for num_ch in [ 0 ... ch.length ]
                     par = ( p for p in parents )
                     par.push info
                     @_update_repr_rec ch[ num_ch ], num_ch, ch.length, par, true
-                    
+
         return info
-                
-            
+
+
     # return true if need rendering after an onchange
     _need_render: ->
         if not @visible[ @visibility_context.get() ]?
             @visible.add_attr @visibility_context.get(), new Lst
-            
+
         for i in [ @closed, @selected, @visible[ @visibility_context.get() ], @visibility_context ]
             if i.has_been_directly_modified()
                 return true
@@ -517,7 +517,7 @@ class TreeView extends View
             if @get_name_class_of( item )?.has_been_modified()
                 return true
         return false
-    
+
     _has_a_selected_child: ( item, item_path ) ->
         if @get_children_of( item )?
             for c in @get_children_of( item )
@@ -534,7 +534,7 @@ class TreeView extends View
         for c in info.children
             res += 1 + @_nb_displayed_children( c )
         return res
-        
+
     _accept_child: ( parent, source ) ->
         return source? and ( source not in parent.parents ) and parent.item.accept_child?( source.item )
 
@@ -543,7 +543,7 @@ class TreeView extends View
         for item in @roots
             @_flat_item_list_rec res, item
         return res
-        
+
     _flat_item_list_rec: ( res, item ) ->
         res.push item
         if @get_output_of( item )?
@@ -552,4 +552,3 @@ class TreeView extends View
         if @get_children_of( item )?
             for c in @get_children_of( item )
                 @_flat_item_list_rec res, c
-        
