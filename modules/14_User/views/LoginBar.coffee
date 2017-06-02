@@ -22,11 +22,12 @@ class LoginBar extends View
     constructor: ( @el, @config ) ->
         super @config
         @edit_view = new UserEditView
-        
+
         @he = new_dom_element
             parentNode: @el
             nodeName   : "div"
             style:
+                display : "flex"
                 position: "absolute"
                 left    : 0
                 right   : 0
@@ -34,27 +35,84 @@ class LoginBar extends View
                 height  : "30px"
                 withd   : "100%"
                 borderBottom : "1px solid grey" #"#4dbce9"
-    
-    onchange: () -> 
+
+    onchange: () ->
         if @config.has_been_modified
             while @he.firstChild?
                 @he.removeChild @he.firstChild
-            
-            logo_div = new_dom_element
+
+            # logo_div = new_dom_element
+            #     parentNode: @he
+            #     nodeName   : "div"
+            #     className  : "logo"
+            logo_img = new_dom_element
+              parentNode: @he
+              nodeName: "img"
+              src: "utility_admin-dashboard/assets/img/smart-building-platform.png"
+              style:
+                height  : "100%"
+                withd   : "100%"
+
+            logo_txt = new_dom_element
+              parentNode: @he
+              nodeName: "p"
+              txt       : "Studio"
+              style:
+                marginTop: "10px"
+                marginLeft: "33%"
+                fontSize: "14px"
+
+
+            logo_txt = new_dom_element
+              parentNode: @he
+              nodeName: "user_name"
+              txt       : config.user
+              style:
+                position: "absolute"
+                right: 0
+                fontSize: "14px"
+                marginRight: "8%"
+                marginTop: "10px"
+
+
+
+            logo_profil = new_dom_element
+              parentNode: @he
+              nodeName: "img"
+              src: "utility_admin-dashboard/assets/img/home_user.jpg"
+              style:
+                height  : "80%"
+                withd   : "80%"
+                position: "absolute"
+                right: 0
+                marginRight: "40px"
+                borderRadius: "40px"
+                marginTop: "3px"
+
+             logout_div = new_dom_element
                 parentNode: @he
                 nodeName   : "div"
-                className  : "logo"
-            
-            
+                className  : "logout_div"
+                onclick: ( evt ) =>
+                    # if (config.user)
+                    #   delete config.user;
+                    # if (config.password)
+                    #   delete config.password;
+                    localStorage.removeItem('spinal_user_connect');
+                    # if (error)
+                    #   window.location = "login-dashboard.html#error";
+                    # else {
+                    #   window.location = "login-dashboard.html";
+                    # }
+                    window.location = "login-dashboard.html"
+                style:
+                    position: "absolute"
+                    right: 0
+                #     color: "red"
+
+
 #################  Decomment to add organisation and user infos  ##################
-#             logout_div = new_dom_element
-#                 parentNode: @he
-#                 nodeName   : "div"
-#                 className  : "logout_div"
-#                 onmousedown: ( evt ) =>
-#                     $.removeCookie("password", { path: '/' })
-#                     window.location = "login.html"
-#             
+#
 #             user_div = new_dom_element
 #                 parentNode: @he
 #                 nodeName   : "div"
@@ -69,8 +127,8 @@ class LoginBar extends View
 #                     cursor : "pointer"
 #                 onmousedown: ( evt ) =>
 #                     @edit_view.edit_user evt
-#             
-#             
+#
+#
 #             organisation_div = new_dom_element
 #                 parentNode: @he
 #                 nodeName   : "div"
@@ -86,6 +144,5 @@ class LoginBar extends View
 #                 onmousedown: ( evt ) =>
 #                     myWindow = window.open '',''
 #                     myWindow.document.location = "organisation.html"
-#                     myWindow.focus()  
+#                     myWindow.focus()
 #######################################################################################
-                
