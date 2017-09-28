@@ -48,7 +48,7 @@ class ModelEditorItem_TextAreaLanguage extends ModelEditorItem
                         changed_string = @fullscreen_code_mirror.getValue()
                         @model.set changed_string
                         @model.callback?()
-                        @get_focus()?.set @process_id
+                        @get_focus()?.set(@process_id)
                     onCursorActivity: =>
                         @fullscreen_code_mirror.setLineClass(@hlLine, null)
                         @hlLine = @fullscreen_code_mirror.setLineClass(@fullscreen_code_mirror.getCursor().line, "activeline")
@@ -100,7 +100,7 @@ class ModelEditorItem_TextAreaLanguage extends ModelEditorItem
             txt       : @model.get()
             
         @ev?.onmousedown = =>
-            @get_focus()?.set @process_id
+            @get_focus()?.set(@process_id)
 
         @code_mirror = CodeMirror.fromTextArea @textarea, {
             lineNumbers : true,
@@ -118,7 +118,7 @@ class ModelEditorItem_TextAreaLanguage extends ModelEditorItem
         }
 #             indentUnit = @code_mirror.getOption('indentUnit')
         @code_mirror.getWrapperElement().onmousedown = =>
-            @get_focus()?.set @process_id
+            @get_focus()?.set(@process_id)
             
         @hlLine2 = @code_mirror.setLineClass(0, "activeline")
         
