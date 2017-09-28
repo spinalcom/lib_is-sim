@@ -43,7 +43,7 @@ class ModelEditorItem_CheckBox extends ModelEditorItem
         
         if @legend_focus != false
             @ev?.onmousedown = =>
-                @get_focus()?.set @process_id
+                @get_focus()?.set(@process_id)
                 @model.toggle()
             
     onchange: ->
