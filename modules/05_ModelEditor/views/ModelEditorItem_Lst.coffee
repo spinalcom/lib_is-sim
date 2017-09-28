@@ -57,7 +57,7 @@ class ModelEditorItem_Lst extends ModelEditorItem
                         
                 if @lst.length and @ev?
                     @ev.onmousedown = =>
-                        @get_focus()?.set @lst[ 0 ].process_id
+                        @get_focus()?.set(@lst[ 0 ].process_id)
 
 
         @fd = true
