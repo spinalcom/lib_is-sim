@@ -20,8 +20,8 @@
 #
 class IcoBar extends View
     constructor: ( @el, @tree_app, params = {} ) ->
+        super @tree_app.data.modules
         @modules = @tree_app.data.modules
-        super @modules
         
         @app_data = @tree_app.data
         super @app_data
