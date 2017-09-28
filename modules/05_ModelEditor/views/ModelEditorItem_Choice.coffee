@@ -32,7 +32,7 @@ class ModelEditorItem_Choice extends ModelEditorItem
                 width: @ew + "%"
 
         @ev?.onmousedown = =>
-            @get_focus()?.set @process_id
+            @get_focus()?.set(@process_id)
             
     onchange: ->
         if @model.lst.has_been_modified()
