@@ -20,6 +20,7 @@
 # a square Matrix of fixed size = 3*3, full of zeros
 class Mat_3 extends Vec_3
     constructor: ( ) ->
+        super()
         # each matrix line is a Vec_3
         this[0] = new Vec_3
         this[1] = new Vec_3
