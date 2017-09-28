@@ -56,7 +56,7 @@ class ModelEditorItem_MoveButtons extends ModelEditorItem
                 @snapshot()
                 @model.step.set @input.value
             onfocus   : =>
-                @get_focus()?.set @process_id   
+                @get_focus()?.set(@process_id)
 
         @up = new_dom_element
             parentNode: @ed

@@ -117,3 +117,5 @@ class Color extends Model
         if r.length == 1
             r = "0" + r
         return r
+
+class SpinalColor extends Color

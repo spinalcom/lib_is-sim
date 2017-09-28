@@ -21,8 +21,8 @@
 
 class MessageView extends View
     constructor: ( model, evt ) ->
-        @user_email = Cookies.set("email")
         super model
+        @user_email = Cookies.set("email")
         @model = model
         
         @container_global = new_dom_element

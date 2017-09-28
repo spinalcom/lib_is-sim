@@ -62,7 +62,7 @@ class ModelEditorItem_TypedArray extends ModelEditorItem
                             @snapshot()
                             @model.set_val i, input.value
                         onfocus   : =>
-                            @get_focus()?.set @process_id
+                            @get_focus()?.set(@process_id)
         
         # update data
         for input, i in @_inputs

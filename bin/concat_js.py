@@ -19,7 +19,7 @@
 
 """
 Contains the function
-  def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen" ):
+  def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen/" ):
 
 which permits to compile and concatenate coffescript, js and css files present in root_dir or sub directories in output_...
 
@@ -143,7 +143,7 @@ def mkdir_for( name ):
             os.mkdir( newdir )
 
 # see header description
-def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen", base_img = "" ):
+def concat_js( root_dir, output_js, output_cs = "", tmp_dir = ".gen/", base_img = "" ):
     if not len( base_img ):
         base_img = root_dir
     out_js = None

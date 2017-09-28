@@ -20,9 +20,9 @@
 #
 class DeskNavigatorView extends View
     constructor: ( @el, @tree_app, params = {} ) ->        
+        super @tree_app.data
         @app_data = @tree_app.data
         
-        super @app_data
         
         @icon_container = new_dom_element
             nodeName  : "div"

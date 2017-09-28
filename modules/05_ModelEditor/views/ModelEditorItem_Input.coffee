@@ -32,10 +32,10 @@ class ModelEditorItem_Input extends ModelEditorItem
                 @snapshot()
                 @model.set @input.value
             onfocus   : =>
-                @get_focus()?.set @process_id
+                @get_focus()?.set(@process_id)
 
         @ev?.onmousedown = =>
-            @get_focus()?.set @process_id
+            @get_focus()?.set(@process_id)
                 
     onchange: ->
         if @model.has_been_modified()

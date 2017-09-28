@@ -20,13 +20,10 @@
 # @selected is a list of paths
 #
 class TreeView extends View
-    constructor: ( @el, @roots, @selected = new Lst, @visible = new Model, @closed = new Lst, @visibility_context ) ->
-        if not @visibility_context?
-            @visibility_context = new Str "default_visibility_context"
+    constructor: ( @el, @roots, @selected = new Lst, @visible = new Model, @closed = new Lst, @visibility_context = new Str("default_visibility_context")) ->
+        super [ @roots, @closed, @selected, @visible, @visibility_context ]
         if not @visible[ @visibility_context.get() ]?
             @visible.add_attr @visibility_context.get(), new Lst
-
-        super [ @roots, @closed, @selected, @visible, @visibility_context ]
 
         # prefix for class names
         @css_prefix = ""

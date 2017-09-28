@@ -21,6 +21,7 @@
 # Tree application
 class DeskApp extends View
     constructor: ( @bel, @data = new TreeAppData ) ->
+        super()
         @user_email = Cookies.set("email")
         
         @layout = @data.layout

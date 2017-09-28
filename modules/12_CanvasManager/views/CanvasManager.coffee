@@ -33,6 +33,7 @@ class CanvasManager extends View
     @ctx_id = -1
     
     constructor: ( params ) ->
+        super()
         # use params
         for key, val of params
             @[ key ] = val
