@@ -19,7 +19,7 @@
 
 class Timeline extends View
     constructor: ( @el, @tree_app, params = {} ) ->
-        super @modules
+        super @tree_app.data.modules
         @modules = @tree_app.data.modules
                 
         @tree_app.data.focus.bind this
