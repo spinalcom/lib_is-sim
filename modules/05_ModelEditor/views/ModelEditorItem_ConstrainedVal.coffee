@@ -30,7 +30,7 @@ class ModelEditorItem_ConstrainedVal extends ModelEditorItem
             item_type : ModelEditorItem_Input
 
         @ev?.onmousedown = =>
-            @get_focus()?.set @inp.process_id
+            @get_focus()?.set(@inp.process_id)
 
         # slider
         @div = new_dom_element
