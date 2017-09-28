@@ -19,33 +19,31 @@
 
 #
 class DeskNavigatorView extends View
-    constructor: ( @el, @tree_app, params = {} ) ->        
+    constructor: ( @el, @tree_app, params = {} ) ->
+        super @tree_app.data
         @app_data = @tree_app.data
-        
-        super @app_data
-        
+
         @icon_container = new_dom_element
             nodeName  : "div"
             parentNode: @el
             style      :
                 padding    : "0 0 0 0"
-    
-        
+
     onchange: ->
         if @app_data.selected_list_desk_items.has_been_directly_modified
             while @icon_container.firstChild?
                 @icon_container.removeChild @icon_container.firstChild
-            
+
             block = new_dom_element
                 parentNode : @icon_container
                 nodeName   : "span"
-                
+
             selected_list_desk_items = if @app_data.selected_list_desk_items[0]._ref? then @app_data.selected_list_desk_items[0]._ref.get() else @app_data.selected_list_desk_items[0]._name.get()
-            
+
 #             console.log selected_list_desk_items
 #             console.log @app_data.selected_list_desk_items[0]._ref.get()
 #             console.log @app_data.selected_list_desk_items[0]._name.get()
-            
+
             #alert @app_data.selected_list_desk_items[0]._name.get()
             if selected_list_desk_items == "Projects"
                 Projects_dir = FileSystem._home_dir + "/__projects__"
@@ -54,8 +52,6 @@ class DeskNavigatorView extends View
                     test = new ModelEditorItem_Project
                           el             : block 
                           model          : current_dir
-            
-            
             
 #                 fs = @get_fs_instance()
 #                 DeskNavigatorView.new_project_button block, this
