@@ -21,6 +21,7 @@
 
 class OrganisationView extends View
     constructor: ( @bel, @data ) ->
+        super()
         @user_email = Cookies.set("email")
         
         @layout = @data.layout
