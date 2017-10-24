@@ -19,9 +19,8 @@
 
 #
 
-class UserEditView extends View
+class UserEditView
     constructor: ( ) ->
-        super()
         @user_email = Cookies.set("email")
     
     edit_user: ( evt ) =>

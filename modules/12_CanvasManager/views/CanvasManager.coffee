@@ -33,15 +33,15 @@ class CanvasManager extends View
     @ctx_id = -1
     
     constructor: ( params ) ->
-        super()
+        tmp = {}
         # use params
         for key, val of params
-            @[ key ] = val
+          tmp[ key ] = val
 
         # default values
         dv = ( field, fun ) =>
-            if not this[ field ]?
-                this[ field ] = fun()
+            if not tmp[ field ]?
+                tmp[ field ] = fun()
 
         dv "items"                , -> new Lst
         dv "cam"                  , => new Cam @want_aspect_ratio
@@ -54,7 +54,10 @@ class CanvasManager extends View
         dv "auto_fit"             , -> false
         dv "class_name"           , -> ''
             
-        super [ @items, @cam, @time ]
+        super [ tmp.items, tmp.cam, tmp.time ]
+        for key, val of tmp
+          @[key] = val
+
 
         #
         @canvas = new_dom_element

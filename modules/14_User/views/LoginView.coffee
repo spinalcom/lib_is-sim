@@ -18,9 +18,8 @@
 
 
 #
-class LoginView extends View
+class LoginView
     constructor: ( @el ) ->
-        super()
         @page_container = new_dom_element
             nodeName  : "div"
             parentNode: @el
