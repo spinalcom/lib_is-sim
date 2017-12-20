@@ -593,7 +593,7 @@ class ModelEditorItem_Directory extends ModelEditorItem
         
         for elem, i in sorted
 #             if not elem.name.get().match( /^\./)
-            if not (elem.name.get().match( /^__/) and elem.name.get().match( /__$/))
+            # if not (elem.name.get().match( /^__/) and elem.name.get().match( /__$/))
                 do ( elem, i ) =>
                     file_container = new_dom_element
                         parentNode: @all_file_container

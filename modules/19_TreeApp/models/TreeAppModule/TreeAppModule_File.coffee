@@ -47,7 +47,8 @@ class TreeAppModule_File extends TreeAppModule
                     fs = new FileSystem
                     FileSystem._disp = false
                  
-                dir = if @home_dir? then @home_dir else FileSystem._home_dir + "/__files__"
+                dir = if @home_dir? then @home_dir else FileSystem._home_dir
+                #  + "/__files__"
                   
                 #alert dir
                 fs.load_or_make_dir dir, ( d, err ) =>     
